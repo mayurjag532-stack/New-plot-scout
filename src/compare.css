@@ -1,0 +1,87 @@
+/* ==========================================================================
+   COMPARE — Apple-comparison architecture: sticky identity heads, hairline
+   spec rows, proportional bars. One column per plot; no cards inside cards.
+   ========================================================================== */
+.ps-cmp-scrim { position: fixed; inset: 0; z-index: 60; background: rgb(var(--c-bg) / .55); backdrop-filter: blur(10px); display: flex; align-items: flex-end; justify-content: center; }
+.ps-cmp {
+  width: 100%; max-width: 1180px; height: 94dvh; background: var(--surface-1, rgb(var(--c-bg)));
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0; box-shadow: var(--shadow-sheet);
+  display: flex; flex-direction: column; overflow: hidden; outline: none;
+  border: 1px solid var(--line); border-bottom: 0;
+}
+@media (min-width: 900px) { .ps-cmp-scrim { align-items: center; padding: 28px; } .ps-cmp { height: min(92dvh, 940px); border-radius: var(--radius-sheet); border-bottom: 1px solid var(--line); } }
+.ps-cmp-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 18px 20px 12px; border-bottom: 1px solid var(--line); flex: none; }
+.ps-cmp-top h2 { font-size: 28px; line-height: 1.05; margin-top: 4px; color: var(--text); }
+.ps-cmp-close { min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--text); font-size: 13px; font-weight: 600; }
+.ps-cmp-scroll { flex: 1; overflow: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.ps-cmp-body { padding: 0 20px 32px; max-width: 1140px; margin: 0 auto; }
+
+.ps-cmp-map { position: relative; height: 190px; margin: 16px 0 0; border-radius: 18px; overflow: hidden; border: 1px solid var(--line); isolation: isolate; }
+@media (min-width: 900px) { .ps-cmp-map { height: 240px; } }
+.ps-cmp-map-note { position: absolute; left: 10px; bottom: 10px; z-index: 500; font-size: 11px; padding: 5px 10px; border-radius: 999px; background: var(--glass-strong); border: 1px solid var(--glass-line); color: var(--text-dim); }
+.ps-cmp-pin { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-forest); color: #F7F3EC; font: 700 14px/1 var(--font-display, serif); border: 3px solid #F7F3EC; box-shadow: 0 3px 12px rgba(0,0,0,.4); }
+[data-theme="dark"] .ps-cmp-pin { background: #A7C7B2; color: #131512; border-color: #131512; }
+
+/* identity heads */
+.ps-cmp-heads { display: none; }
+.ps-cmp-corner { align-self: end; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); font-weight: 700; padding-bottom: 6px; }
+.ps-cmp-id { display: grid; gap: 4px; align-content: start; min-width: 0; }
+.ps-cmp-thumb { position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: rgb(var(--c-panel)); border: 1px solid var(--line); color: var(--text-dim); }
+.ps-cmp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ps-cmp-thumb svg { width: 100%; height: 100%; opacity: .6; }
+.ps-cmp-num { position: absolute; left: 8px; top: 8px; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font: 700 12px/1 var(--font-display, serif); background: var(--surface-forest); color: #F7F3EC; }
+[data-theme="dark"] .ps-cmp-num { background: #A7C7B2; color: #131512; }
+.ps-cmp-name { font-size: 20px; line-height: 1.12; color: var(--text); margin-top: 8px; overflow-wrap: anywhere; }
+.ps-cmp-where { font-size: 12px; color: var(--text-dim); line-height: 1.3; }
+.ps-cmp-verdict { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+.ps-cmp-open { justify-self: start; min-height: 44px; padding: 0; background: none; border: 0; color: var(--accent); font-size: 12.5px; font-weight: 600; }
+
+/* groups */
+.ps-cmp-group { margin-top: 30px; }
+.ps-cmp-gtitle { display: flex; align-items: baseline; gap: 10px; font-size: 22px; color: var(--text); padding-bottom: 8px; border-bottom: 1px solid var(--line-strong, var(--line)); }
+.ps-cmp-gtitle span { font: 700 10px/1 var(--font-body, sans-serif); letter-spacing: .14em; color: var(--gold); }
+.ps-cmp-row { border-bottom: 1px solid var(--hairline); }
+.ps-cmp-label { font-size: 12px; color: var(--text-dim); font-weight: 500; }
+.ps-cmp-val { font-size: 15px; color: var(--text); font-weight: 600; }
+.ps-cmp-val.is-display { font-size: 24px; font-weight: 500; line-height: 1.1; }
+.ps-cmp-val.is-empty { color: var(--text-dim); font-weight: 400; opacity: .6; }
+.ps-cmp-tag { font-style: normal; font-size: 9.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); border: 1px solid color-mix(in srgb, var(--gold) 45%, transparent); border-radius: 999px; padding: 2px 7px; white-space: nowrap; }
+.ps-cmp-bar { display: block; height: 3px; border-radius: 2px; background: var(--hairline); overflow: hidden; width: 100%; }
+.ps-cmp-bar i { display: block; height: 100%; background: var(--accent); opacity: .75; border-radius: 2px; transform-origin: left; animation: ps-cmp-grow var(--motion-spatial) var(--ease-spatial) both; }
+.is-best .ps-cmp-bar i { background: var(--gold); opacity: 1; }
+@keyframes ps-cmp-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* mobile: a metric, then the plots stacked beneath it */
+.ps-cmp-row-d { display: none; }
+.ps-cmp-row-m { padding: 12px 0; }
+.ps-cmp-row-m ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 8px; }
+.ps-cmp-row-m li { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; column-gap: 8px; align-items: baseline; row-gap: 5px; }
+.ps-cmp-row-m li .ps-cmp-bar, .ps-cmp-row-m li .ps-cmp-tag { grid-column: 2 / -1; }
+.ps-cmp-row-m li .ps-cmp-tag { justify-self: start; grid-row: 2; }
+.ps-cmp-mnum { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; background: rgb(var(--c-panel)); color: var(--text); }
+.ps-cmp-mname { font-size: 13px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* mobile identity: a horizontal strip of the plots */
+.ps-cmp-heads { display: flex; gap: 12px; overflow-x: auto; padding: 16px 0 4px; scroll-snap-type: x proximity; }
+.ps-cmp-heads .ps-cmp-corner { display: none; }
+.ps-cmp-heads .ps-cmp-id { flex: 0 0 72%; scroll-snap-align: start; }
+
+@media (min-width: 900px) {
+  .ps-cmp-heads { display: grid; column-gap: 20px; overflow: visible; padding: 18px 0 14px; position: sticky; top: 0; z-index: 20; background: var(--surface-1, rgb(var(--c-bg))); border-bottom: 1px solid var(--line); scroll-snap-type: none; }
+  .ps-cmp-heads .ps-cmp-corner { display: block; }
+  .ps-cmp-heads .ps-cmp-id { flex: none; }
+  .ps-cmp-name { font-size: 19px; }
+  .ps-cmp-row-m { display: none; }
+  .ps-cmp-row-d { display: grid; column-gap: 20px; align-items: center; padding: 13px 0; }
+  .ps-cmp-cell { display: grid; gap: 6px; align-content: center; min-width: 0; padding-right: 8px; }
+  .ps-cmp-cell .ps-cmp-tag { justify-self: start; }
+  .ps-cmp-cell.is-best .ps-cmp-val { color: var(--gold); }
+}
+@media (prefers-reduced-motion: reduce) { .ps-cmp-bar i { animation: none; } }
+
+/* Compare opens as a spatial formation, not a generic modal. */
+.ps-cmp { animation: ps-compare-in var(--motion-medium) var(--ease-sheet) both; }
+@keyframes ps-compare-in {
+  from { opacity: 0; transform: translateY(22px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .ps-cmp { animation: none; } }

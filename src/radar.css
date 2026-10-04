@@ -1,0 +1,65 @@
+/* RADAR — spatial scan view + provenance ledger. Also home of the shared .ps-empty state (Bear-style: calm, drawn, one idea). */
+.ps-rad { max-width: 1120px; margin: 0 auto; padding: 22px 16px 120px; }
+@media (min-width: 768px) { .ps-rad { padding: 36px 24px 64px; } }
+.ps-rad > header h2 { font-size: 36px; line-height: 1.05; color: var(--text); margin-top: 6px; }
+.ps-rad-grid { display: grid; gap: 18px; margin-top: 20px; }
+@media (min-width: 960px) { .ps-rad-grid { grid-template-columns: minmax(0, 1.25fr) minmax(340px, .75fr); align-items: start; } .ps-rad-map { height: 560px !important; position: sticky; top: 24px; } }
+.ps-rad-map { position: relative; height: 260px; border-radius: 22px; overflow: hidden; border: 1px solid var(--line); isolation: isolate; }
+.ps-rad-map.is-empty { display: grid; place-content: center; justify-items: center; text-align: center; gap: 6px; padding: 24px; background: rgb(var(--c-panel)); color: var(--text-dim); }
+.ps-rad-map.is-empty svg { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .28; }
+.ps-rad-map.is-empty p { position: relative; font-size: 22px; color: var(--text); }
+.ps-rad-map.is-empty small { position: relative; font-size: 13px; max-width: 30ch; line-height: 1.45; }
+.ps-rad-chip { position: absolute; left: 12px; top: 12px; z-index: 500; padding: 8px 12px; border-radius: 999px; font-size: 12px; color: var(--text); background: var(--glass-strong); border: 1px solid var(--glass-line); backdrop-filter: blur(14px); }
+.ps-rad-panel { display: grid; gap: 16px; }
+.ps-rad-seg { width: 100%; }
+.ps-rad-seg button { flex: 1; min-height: 44px; }
+.ps-rad-seg button[aria-selected="true"] { background: rgb(var(--c-card)); color: var(--text); box-shadow: var(--shadow-sm); }
+.ps-rad-place { font-size: 12.5px; color: var(--text-dim); margin-top: 8px; }
+.ps-rad-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ps-rad-radius { display: grid; gap: 8px; }
+.ps-rad-radius > span { display: flex; align-items: baseline; justify-content: space-between; }
+.ps-rad-radius strong { font-size: 22px; font-weight: 500; color: var(--text); }
+.ps-rad-radius input[type=range] { width: 100%; accent-color: var(--accent); border: 0; padding: 0; background: none; min-height: 32px; }
+.ps-rad-msg { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+.ps-rad-rule { font-size: 12px; color: var(--text-dim); line-height: 1.5; padding-top: 12px; border-top: 1px solid var(--hairline); }
+.ps-rad-rule strong { color: var(--text); }
+.ps-rad-manage { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 8px; }
+.ps-rad-manage > button { min-height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--text); font-size: 13px; font-weight: 600; }
+.ps-rad-manage > button:disabled { opacity: .4; }
+.ps-rad-manage > button.is-danger { color: rgb(var(--c-bad)); }
+.ps-rad-pick { flex-basis: 100%; max-height: 160px; overflow: auto; display: grid; }
+.ps-rad-pick label { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 13px; color: var(--text-dim); }
+.ps-rad-pick input { width: 20px; height: 20px; flex: none; }
+
+/* ledger */
+.ps-led { margin-top: 34px; }
+.ps-led > header h3 { font-size: 26px; color: var(--text); margin-top: 4px; }
+.ps-led > header p:last-child { font-size: 13.5px; color: var(--text-dim); margin-top: 4px; }
+.ps-led-list { list-style: none; margin: 16px 0 0; padding: 0; border-top: 1px solid var(--line); }
+.ps-led-item { border-bottom: 1px solid var(--line); }
+.ps-led-head { width: 100%; display: flex; align-items: flex-start; gap: 14px; text-align: left; padding: 16px 0; background: none; border: 0; color: var(--text); min-height: 64px; }
+.ps-led-rail { width: 3px; align-self: stretch; border-radius: 2px; background: var(--line-strong, var(--line)); flex: none; }
+.ps-led-rail.is-warn { background: var(--gold); } .ps-led-rail.is-bad { background: rgb(var(--c-bad)); } .ps-led-rail.is-good { background: rgb(var(--c-good)); }
+.ps-led-main { flex: 1; min-width: 0; display: grid; gap: 3px; }
+.ps-led-title { font-size: 16px; font-weight: 600; overflow-wrap: anywhere; }
+.ps-led-meta { font-size: 12px; color: var(--text-dim); }
+.ps-led-text { font-size: 13.5px; color: var(--text-dim); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 4px; }
+.ps-led-body { padding: 0 0 20px 17px; display: grid; gap: 16px; }
+.ps-led-link { font-size: 13.5px; color: var(--accent); word-break: break-all; text-decoration: underline; }
+.ps-led-actions { display: flex; gap: 10px; align-items: center; }
+.ps-led-del { min-height: 44px; padding: 0 6px; background: none; border: 0; color: rgb(var(--c-bad)); font-size: 13px; font-weight: 600; }
+.ps-led-msg { font-size: 13px; color: var(--text-dim); }
+.ps-led-ledger { list-style: none; margin: 8px 0 0; padding: 0 0 0 14px; border-left: 1px solid var(--line); display: grid; gap: 12px; }
+.ps-led-ledger li { position: relative; }
+.ps-led-ledger li::before { content: ""; position: absolute; left: -18px; top: 5px; width: 7px; height: 7px; border-radius: 50%; background: var(--text-dim); }
+.ps-led-ledger span { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
+.ps-led-ledger p { font-size: 12.5px; color: var(--text); margin-top: 2px; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.ps-led-gate { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; padding: 14px; border-radius: 14px; background: rgb(var(--c-panel)); }
+.ps-led-gate p:last-child { font-size: 13px; color: var(--text-dim); line-height: 1.45; margin-top: 2px; }
+
+/* shared empty state */
+.ps-empty { display: grid; justify-items: center; text-align: center; gap: 8px; padding: 44px 24px; color: var(--text-dim); border-top: 1px solid var(--line); margin-top: 16px; }
+.ps-empty svg { width: 64px; height: 64px; opacity: .7; margin-bottom: 6px; }
+.ps-empty p { font-size: 22px; color: var(--text); }
+.ps-empty small { font-size: 13.5px; line-height: 1.5; max-width: 38ch; }
+.ps-empty .ps-btn-primary { margin-top: 12px; width: auto; padding: 0 22px; }

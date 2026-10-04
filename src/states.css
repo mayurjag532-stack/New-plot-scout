@@ -1,0 +1,21 @@
+/* STATES — offline, storage error. Quiet, drawn, never a red slab. */
+.ps-offline { position: fixed; z-index: 55; left: 50%; top: calc(10px + env(safe-area-inset-top)); transform: translateX(-50%); max-width: calc(100% - 24px); display: flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; background: var(--glass-strong); border: 1px solid var(--glass-line); box-shadow: var(--shadow-md); backdrop-filter: blur(14px); font-size: 12.5px; font-weight: 600; color: var(--text); animation: ps-rise var(--motion-base) var(--ease-spatial) both; }
+.ps-offline i { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); flex: none; }
+.ps-offline span { font-weight: 400; color: var(--text-dim); }
+@media (max-width: 520px) { .ps-offline span { display: none; } }
+.ps-storage-err { position: sticky; top: 0; z-index: 54; display: flex; gap: 14px; align-items: center; justify-content: space-between; padding: 14px 18px; background: rgb(var(--c-card)); border-bottom: 1px solid rgb(var(--c-bad) / .5); box-shadow: inset 4px 0 0 rgb(var(--c-bad)); }
+.ps-storage-err p { font-size: 17px; color: var(--text); }
+.ps-storage-err small { display: block; font-size: 12.5px; color: var(--text-dim); margin-top: 2px; line-height: 1.4; }
+.ps-storage-err button { min-height: 44px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--text); font-weight: 600; font-size: 13px; }
+.ps-offline { top: auto; bottom: calc(104px + env(safe-area-inset-bottom)); }
+@media (min-width: 768px) { .ps-offline { bottom: 24px; } }
+.ps-tile-notice { max-width: calc(100% - 96px); }
+.ps-empty-home { position: relative; border-top: 0; padding: 56px 24px 40px; margin-top: 8px; isolation: isolate; }
+.ps-empty-home svg { position: absolute; inset: 0 0 auto 0; width: 100%; height: 220px; opacity: .55; color: var(--text-dim); z-index: -1; mask-image: linear-gradient(#000 40%, transparent); -webkit-mask-image: linear-gradient(#000 40%, transparent); }
+.ps-empty-home .ps-kicker { margin-top: 70px; }
+.ps-empty-home p.font-display { font-size: 30px; line-height: 1.1; max-width: 16ch; }
+.ps-empty-home .ps-btn-primary { min-height: 52px; margin-top: 18px; }
+.ps-empty p.ps-kicker { font-size: 10px; color: var(--accent); }
+/* tab change: content settles in, no layout jump */
+.ps-tab-in { animation: ps-fade var(--motion-base) ease backwards; }
+@media (prefers-reduced-motion: reduce) { .ps-tab-in { animation: none; } }

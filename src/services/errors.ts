@@ -1,0 +1,1 @@
+export function installGlobalErrorBoundary(){window.addEventListener("error",e=>console.error("[Plot Scout]",e.error||e.message));window.addEventListener("unhandledrejection",e=>console.error("[Plot Scout] unhandled rejection",e.reason));}

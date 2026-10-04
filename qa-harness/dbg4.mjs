@@ -1,0 +1,11 @@
+import { launch } from "./harness.mjs";
+const { browser, page } = await launch({});
+await page.locator("button:has-text('QA Fixture · Mulshi')").first().click();
+await page.waitForTimeout(900);
+const probe = async (label, css) => { if (css) await page.addStyleTag({ content: css }); console.log(label, await page.evaluate(() => [document.documentElement.scrollWidth, innerWidth, document.querySelector('meta[name=viewport]')?.content])); };
+await probe("base");
+await probe("hide header", ".ps-dhead{display:none!important}");
+await probe("hide dnav", ".ps-dnav{display:none!important}");
+await probe("hide sections", ".ps-dsections{display:none!important}");
+await probe("hide spatial", ".ps-dspatial{display:none!important}");
+await browser.close();

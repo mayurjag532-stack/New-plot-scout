@@ -1,0 +1,5 @@
+import { getSession, refreshSession } from "./auth";
+import { backendConfigured, runtimeConfig } from "./config";
+async function call(name:string,body:unknown,retry=true):Promise<any>{if(!backendConfigured)throw new Error("Production backend is not configured.");let s=getSession();if(!s)throw new Error("Sign in is required for purchases and entitlement restore.");let r=await fetch(`${runtimeConfig.supabaseUrl}/functions/v1/${name}`,{method:"POST",headers:{apikey:runtimeConfig.supabaseAnonKey,Authorization:`Bearer ${s.access_token}`,"Content-Type":"application/json"},body:JSON.stringify(body)});if(r.status===401&&retry){s=await refreshSession();if(s)return call(name,body,false)}const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d?.error||"Server request failed.");return d;}
+export const createRazorpayOrder=(sku:string)=>call("create-razorpay-order",{sku});
+export const verifyRazorpayPayment=(payload:{razorpay_order_id:string;razorpay_payment_id:string;razorpay_signature:string})=>call("verify-razorpay-payment",payload);

@@ -1,0 +1,209 @@
+/* ==========================================================================
+   PROPERTY DOSSIER — Land.id spatial hierarchy × The Modern House editorial
+   composition. Aerial first; the dossier sheet rises over it. On desktop the
+   map holds the left half (Pindrop map + report pairing) and the dossier
+   scrolls beside it. Sections are editorial headings with hairlines — not cards.
+   ========================================================================== */
+
+.ps-dpage { position: relative; min-height: 100dvh; background: var(--canvas); --ps-header-h: 64px; }
+
+/* ---- floating header ---- */
+.ps-dhead {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 900; height: var(--ps-header-h);
+  display: flex; align-items: center; gap: 8px; padding: env(safe-area-inset-top) 12px 0;
+  pointer-events: none; transition: background-color var(--motion-base) ease, border-color var(--motion-base) ease;
+  border-bottom: 1px solid transparent;
+}
+.ps-dhead > *, .ps-dhead-actions > * { pointer-events: auto; }
+.ps-dhead.is-condensed {
+  background: color-mix(in srgb, var(--canvas) 90%, transparent);
+  backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  border-bottom-color: var(--line);
+}
+.ps-dhead-btn { width: 44px; height: 44px; min-height: 44px; border-radius: 50%; display: grid; place-items: center; color: var(--text); padding: 0; }
+.ps-dhead-pill { min-height: 44px; padding: 0 16px; border-radius: 22px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; color: var(--text); text-decoration: none; }
+.ps-dhead-pill-strong { background: var(--cta-bg) !important; color: var(--cta-fg) !important; border-color: transparent !important; }
+.ps-dhead-title {
+  flex: 1; min-width: 0; font-size: 18px; font-weight: 600; letter-spacing: -.01em; color: var(--text);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; transform: translateY(4px);
+  transition: opacity var(--motion-base) ease, transform var(--motion-base) var(--ease-spatial);
+}
+.ps-dhead.is-condensed .ps-dhead-title { opacity: 1; transform: none; }
+.ps-dhead-actions { display: flex; gap: 8px; margin-left: auto; align-items: center; }
+.ps-dhead.is-condensed:not(:has(.ps-dhead-title[aria-hidden="true"])) .ps-dhead-actions { margin-left: 0; }
+.ps-menu {
+  position: absolute; right: 0; top: calc(100% + 8px); min-width: 210px; padding: 6px; z-index: 950;
+  background: var(--surface-1); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow-md); transform-origin: top right;
+}
+.ps-menu button { width: 100%; text-align: left; padding: 0 14px; border-radius: 10px; font-size: 14px; color: var(--text); background: transparent; border: 0; }
+.ps-menu button:hover { background: var(--surface-2); }
+.ps-menu hr { border: 0; height: 1px; background: var(--line); margin: 4px 6px; }
+
+/* ---- aerial hero ---- */
+.ps-dgrid { display: block; }
+.ps-dspatial { position: relative; height: clamp(240px, 34dvh, 360px); transition: height var(--motion-spatial) var(--ease-spatial); }
+.ps-dpage.is-explore .ps-dspatial { height: 68dvh; }
+.ps-aerial { position: absolute; inset: 0; overflow: hidden; background: var(--surface-2); }
+.ps-aerial .leaflet-control-zoom { display: none; }
+.ps-dspatial { isolation: isolate; z-index: 0; }
+.ps-aerial-controls {
+  position: absolute; left: 12px; right: 12px; bottom: 44px; z-index: 500;
+  display: flex; justify-content: space-between; align-items: flex-end; pointer-events: none;
+}
+.ps-aerial-controls > * { pointer-events: auto; }
+.ps-aerial-tools { display: flex; gap: 8px; align-items: flex-end; }
+.ps-seg { display: inline-flex; padding: 3px; border-radius: 15px; gap: 2px; }
+.ps-seg button { min-height: 38px; padding: 0 14px; border-radius: 12px; font-size: 12.5px; font-weight: 600; color: var(--text-dim); border: 0; background: transparent; }
+.ps-seg button[aria-selected="true"] { background: var(--surface-1); color: var(--text); box-shadow: var(--shadow-sm); }
+[data-theme="dark"] .ps-seg button[aria-selected="true"] { background: var(--surface-3); }
+.ps-count { padding: 0 12px; min-height: 34px; border-radius: 12px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; color: var(--text); font-variant-numeric: tabular-nums; }
+.ps-photostrip { position: absolute; inset: 0; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; outline-offset: -3px; }
+.ps-photostrip::-webkit-scrollbar { display: none; }
+.ps-photoslide { flex: 0 0 100%; scroll-snap-align: center; position: relative; margin: 0; height: 100%; }
+.ps-photoslide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ps-photoslide figcaption {
+  position: absolute; left: 16px; bottom: 96px; display: grid; gap: 2px; padding: 8px 12px; border-radius: 12px;
+  background: rgba(15, 17, 14, .62); color: #F7F3EC; backdrop-filter: blur(10px); font-size: 11px;
+}
+.ps-photoslide figcaption b { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+.ps-photoslide figcaption time { opacity: .75; font-variant-numeric: tabular-nums; }
+.ps-aerial-empty {
+  position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 28px 28px 70px;
+  color: var(--line-strong);
+}
+.ps-aerial-empty svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ps-aerial-empty div { position: relative; max-width: 30ch; }
+.ps-aerial-empty p { font-size: 22px; color: var(--text); font-weight: 600; letter-spacing: -.01em; }
+.ps-aerial-empty small { display: block; font-size: 13px; color: var(--text-dim); margin-top: 6px; line-height: 1.45; }
+
+/* ---- the sheet that rises over the aerial ---- */
+.ps-dsheet {
+  position: relative; z-index: 2; margin-top: -30px; background: var(--canvas);
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0; box-shadow: var(--shadow-sheet);
+  padding: 10px 22px 140px; transition: margin var(--motion-spatial) var(--ease-spatial);
+}
+.ps-dsheet-grab { width: 40px; height: 5px; border-radius: 99px; background: var(--line-strong); margin: 0 auto 18px; opacity: .7; }
+
+/* ---- identity + hero metric ---- */
+.ps-dsum { display: block; }
+.ps-dsum-title {
+  display: block; width: 100%; margin: 10px 0 0 !important; padding: 0 !important;
+  font-size: clamp(32px, 8.4vw, 46px); line-height: 1.05; letter-spacing: -.02em; font-weight: 600; color: var(--text) !important;
+  resize: none; overflow: hidden; min-height: 0 !important;
+}
+.ps-dsum-verdict { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; margin-top: 18px; }
+.ps-dsum-conf { font-size: 12px; color: var(--text-dim); text-transform: capitalize; }
+.ps-dsum-why { font-size: 13px; color: var(--text-dim); line-height: 1.55; margin-top: 10px; max-width: 46ch; }
+.ps-metric { position: relative; margin-top: 28px; padding-top: 22px; }
+.ps-metric::before { content: ""; position: absolute; top: 0; left: 0; width: 36px; height: 2px; background: var(--gold); }
+.ps-metric-label { font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
+.ps-metric-value { font-size: var(--text-hero); line-height: 1; letter-spacing: -.028em; margin-top: 10px; color: var(--text); font-weight: 500; }
+.ps-metric-suffix { font-family: var(--font-sans); font-size: 16px; letter-spacing: 0; color: var(--text-dim); margin-left: 8px; font-weight: 500; }
+.ps-metric-context { font-size: 13px; color: var(--text-dim); margin-top: 12px; }
+.ps-quiet { display: grid; margin-top: 26px; border-top: 1px solid var(--line); }
+.ps-quiet > div { padding: 16px 0 0; min-width: 0; }
+.ps-quiet > div + div { border-left: 1px solid var(--line); padding-left: 16px; }
+.ps-quiet dt { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
+.ps-quiet dd { margin: 6px 0 0; font-size: 21px; line-height: 1.15; color: var(--text); letter-spacing: -.01em; overflow-wrap: anywhere; }
+.ps-facts { display: flex; flex-wrap: wrap; gap: 4px 22px; margin: 22px 0 0; padding: 14px 0 0; border-top: 1px solid var(--line); }
+.ps-link-inline { min-height: 0; background: none; border: 0; padding: 0; font: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; color: inherit; }
+.ps-dossier-save { margin-top: 18px; }
+.ps-save.is-error { border-color: var(--bad); }
+
+/* ---- section navigator ---- */
+.ps-dnav {
+  position: sticky; top: var(--ps-header-h); z-index: 30; margin: 26px -22px 0; padding: 0 22px;
+  background: color-mix(in srgb, var(--canvas) 92%, transparent); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--line);
+}
+.ps-dnav-track { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; padding: 6px 0; margin: 0 -6px; }
+.ps-dnav-track::-webkit-scrollbar { display: none; }
+.ps-dnav-item {
+  position: relative; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 13px; border-radius: 12px;
+  font-size: 13px; font-weight: 500; color: var(--text-dim); background: transparent; border: 0; white-space: nowrap;
+  transition: background-color var(--motion-fast) ease, color var(--motion-fast) ease;
+}
+.ps-dnav-item:hover { color: var(--text); }
+.ps-dnav-item[aria-current="true"] { color: var(--text); background: var(--accent-soft); font-weight: 600; }
+.ps-dnav-n { display: none; }
+.ps-dnav-item.ps-just-ready .ps-dot { animation: ps-just-ready .6s ease-out 1; }
+
+/* ---- editorial sections ---- */
+.ps-dsections { margin-top: 4px; }
+.ps-dsec { border-bottom: 1px solid var(--line); scroll-margin-top: calc(var(--ps-header-h) + 58px); }
+.ps-dsec-head {
+  width: 100%; display: flex; align-items: center; gap: 14px; text-align: left; min-height: 72px; padding: 20px 0;
+  background: transparent; border: 0; color: var(--text); border-radius: 0;
+}
+.ps-dsec-head:active { transform: none; }
+.ps-dsec-num { font-size: 12px; font-weight: 600; letter-spacing: .1em; color: var(--gold); width: 22px; flex: none; font-variant-numeric: tabular-nums; }
+.ps-dsec-titles { flex: 1; min-width: 0; display: grid; gap: 4px; }
+.ps-dsec-title { font-family: var(--font-display); font-size: 23px; line-height: 1.1; font-weight: 600; letter-spacing: -.014em; }
+.ps-dsec-summary { font-size: 12px; color: var(--text-dim); }
+.ps-dsec-state { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; color: var(--text-dim); white-space: nowrap; }
+.ps-dsec-state i { width: 7px; height: 7px; border-radius: 50%; background: var(--line-strong); }
+.ps-dsec-state.tone-ready i { background: var(--good); box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 18%, transparent); }
+.ps-dsec-state.tone-in-progress i { background: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
+.ps-dsec-state.tone-needs-attention { color: var(--bad); }
+.ps-dsec-state.tone-needs-attention i { background: var(--bad); box-shadow: 0 0 0 3px color-mix(in srgb, var(--bad) 18%, transparent); }
+.ps-dsec-chev { color: var(--text-dim); flex: none; transition: transform var(--motion-base) var(--ease-spatial); }
+.ps-dsec[data-open="true"] .ps-dsec-chev { transform: rotate(180deg); }
+.ps-dsec-collapse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--motion-medium) var(--ease-spatial); }
+.ps-dsec[data-open="true"] .ps-dsec-collapse { grid-template-rows: 1fr; }
+.ps-dsec-inner { overflow: hidden; min-height: 0; }
+.ps-dsec-body { padding: 0 0 34px; display: grid; gap: 26px; opacity: 0; transform: translateY(-6px); transition: opacity var(--motion-base) ease, transform var(--motion-medium) var(--ease-spatial); }
+.ps-dsec[data-open="true"] .ps-dsec-body { opacity: 1; transform: none; }
+.ps-dsec-body > * { min-width: 0; }
+
+/* panels inherit the dossier: no boxes, hairline-separated, serif sub-heads */
+.ps-dsec-body .bg-field-card.border { background: transparent !important; border: 0 !important; border-radius: 0 !important; padding: 0 !important; box-shadow: none !important; }
+.ps-dsec-body .bg-field-card.border + .bg-field-card.border { margin-top: 0 !important; }
+.ps-dsec-body h3 { font-family: var(--font-display); font-size: 19px !important; line-height: 1.2; font-weight: 600 !important; letter-spacing: -.01em; color: var(--text); }
+.ps-dsec-body h3 + p { margin-top: 4px; max-width: 52ch; line-height: 1.5; }
+.ps-dsec-body input:not([type="checkbox"]):not([type="file"]), .ps-dsec-body select { min-height: 46px; }
+.ps-dsec-body textarea { min-height: 80px; }
+.ps-dsec-body details > summary { min-height: 44px; display: flex; align-items: center; }
+.ps-locked { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding: 18px 0; border-top: 1px solid var(--line); }
+.ps-locked p { font-size: 19px; font-weight: 600; color: var(--text); }
+.ps-locked small { display: block; color: var(--text-dim); font-size: 12.5px; margin-top: 3px; }
+
+/* ---- desktop: map holds the left half, the dossier scrolls beside it ---- */
+@media (min-width: 1024px) {
+  .ps-dpage { --ps-sheet-w: 620px; }
+  .ps-dgrid { display: grid; grid-template-columns: minmax(0, 1fr) var(--ps-sheet-w); align-items: start; }
+  .ps-dspatial { position: sticky; top: 0; height: 100dvh; }
+  .ps-dpage.is-explore .ps-dspatial { height: 100dvh; }
+  .ps-aerial .leaflet-control-zoom { display: block; }
+  .ps-aerial .leaflet-top.leaflet-right { margin-top: 0; }
+  .ps-aerial-controls { bottom: 24px; left: 24px; right: 24px; }
+  .ps-dsheet { margin-top: 0; border-radius: 0; box-shadow: none; border-left: 1px solid var(--line); padding: 92px 48px 160px; min-height: 100dvh; }
+  .ps-dsheet-grab { display: none; }
+  .ps-dnav { top: var(--ps-header-h); margin: 28px -48px 0; padding: 0 48px; }
+  .ps-dnav-item { padding: 0 12px; }
+  .ps-dsec { scroll-margin-top: 70px; }
+  .ps-dhead { padding: 0 20px; }
+  .ps-dhead.is-condensed { background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom-color: transparent; }
+  .ps-dhead-title { display: none; }
+  .ps-dhead-actions { margin-left: auto; }
+  /* a quiet strip behind the actions once the dossier scrolls, so content never collides with them */
+  .ps-dhead::before {
+    content: ""; position: absolute; top: 0; right: 0; width: var(--ps-sheet-w); height: 100%; z-index: -1; pointer-events: none;
+    background: color-mix(in srgb, var(--canvas) 92%, transparent); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--line); opacity: 0; transition: opacity var(--motion-base) ease;
+  }
+  .ps-dhead.is-scrolled::before { opacity: 1; }
+}
+@media (max-width: 420px) {
+  .ps-dsec-state { font-size: 0; gap: 0; }   /* dot only on narrow phones; label stays in the a11y tree via aria on button text */
+  .ps-dsec-state i { width: 9px; height: 9px; }
+  .ps-dsheet { padding-left: 20px; padding-right: 20px; }
+  .ps-dnav { margin-left: -20px; margin-right: -20px; padding-left: 20px; padding-right: 20px; }
+  .ps-dsec-title { font-size: 22px; }
+}
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+@media (max-width: 767px) {
+  .ps-dspatial { height: clamp(230px, 32dvh, 340px); }
+  .ps-dpage.is-explore .ps-dspatial { height: 68dvh; }
+  .ps-dsheet { margin-top: -18px; border-radius: 24px 24px 0 0; }
+}
